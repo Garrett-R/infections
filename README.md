@@ -23,9 +23,9 @@ To give an input, it must be a .csv file where, for each line, the first number 
 **Total Infection**
 
 To spread a total infection starting from user 42,
-```bash
-./run.py --total -v --input test_data/example_large.csv --output infected_users.csv --user 42
-```
+
+    ./run.py --total -v --input test_data/example_large.csv --output infected_users.csv --user 42
+
 
 **Limited Infection**
 
@@ -65,7 +65,7 @@ For the **limited infection** case, the algorithm is in two parts:
 To Do
 ---------
 
- - Need to fix the hodge-lodge of data structures used since it's inconsistent.  We sometimes use sets of users, sets of user IDs, dictionaries of users, etc.  (Sorry!)
+ - Need to fix the hodge-lodge of data structures for storing users since it's inconsistent.  We sometimes use sets of users, sets of user IDs, dictionaries of users, etc.  (Sorry!)
 
 Here's some possible enhancements for **limited infection**,
 

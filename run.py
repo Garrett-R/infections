@@ -7,6 +7,7 @@
 
 from __future__ import print_function
 import argparse
+from time import time
 from save_load import _try_converting_to_int, load_users, save_users
 from infections import total_infection, limited_infection
 
