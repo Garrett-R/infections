@@ -13,25 +13,36 @@ from infections import total_infection, limited_infection
 
 
 def main():
-    parser = argparse.ArgumentParser(description=
-                                     "Split users for A/B testing, minimizing "
-                                     "connections between groups")
+    parser = argparse.ArgumentParser(description="Split users for A/B testing,"
+                                     "minimizing connections between groups")
 
-    parser.add_argument('-i', '--input', help="Input .csv file where the first number is the user ID, and the following numbers (if any) are IDs of students",
+    parser.add_argument('-i', '--input',
+                        help="""Input .csv file where the first number is the
+                        user ID, and the following numbers (if any) are IDs
+                        of students""",
                         type=str, required=True)
-    parser.add_argument('-o', '--output', help="Ouput .csv file where infected user IDs will be saved to", required=False, type=str)
-    parser.add_argument('-t', '--total', help="Set this to do total infection.  You must then also give a user ID", action="store_true", required=False)
-    parser.add_argument('-u', '--user', help="First infected user when we're doing total infection", required=False, type=int)
-    parser.add_argument('-l', '--limited', help="Limited infection", action="store_true", required=False)
+    parser.add_argument('-o', '--output',
+                        help="""Ouput .csv file where infected user IDs will be
+                        saved to""", required=False, type=str)
+    parser.add_argument('-t', '--total',
+                        help="""Set this to do total infection.  You must then
+                        also give a user ID""", action="store_true",
+                        required=False)
+    parser.add_argument('-u', '--user',
+                        help="""First infected user when we're doing total
+                        infection""", required=False, type=int)
+    parser.add_argument('-l', '--limited', help="Limited infection",
+                        action="store_true", required=False)
     parser.add_argument('-n', '--numToInfect', required=False, type=float,
                         help="""(int or float) If integer, that is the number
                         of people who will be infected.  If float, then it must
                         be between 0 and 1 and represents the proportion of
                         infected people.)""")
     parser.add_argument('-e', '--tolerance', required=False, type=float,
-                        help="""(int or float) The tolerance in number of infected people
-                        setting it to be greater than zero makes it more likely to
-                        find a subset without conflicts.  If it is a float, it'll
+                        help="""(int or float) The tolerance in number of
+                        infected people setting it to be greater than zero
+                        makes it more likely to find a subset without
+                        conflicts.  If it is a float, it'll
                         be interpreted as a proportion of the total population.
                         (ignored if perfect_only is True)""")
     parser.add_argument('-v', '--verbose', action="store_true", required=False)
@@ -80,7 +91,7 @@ def main():
     users = load_users(args.input)
     print("Finished loading.")
     # convert to dictionary
-    users = {user.get_uid():user for user in users}
+    users = {user.get_uid(): user for user in users}
 
     time1 = time()
     if args.total:
@@ -90,11 +101,15 @@ def main():
     elif args.limited:
         if args.tolerance is None:
             args.tolerance = 0
+        if args.tolerance > 1.0:
+            args.tolerance = int(args.tolerance)
+        if args.numToInfect > 1.0:
+            args.numToInfect = int(args.numToInfect)
         infected_uids = limited_infection(users, args.numToInfect,
-                                           args.tolerance, args.verbose)
+                                          args.tolerance, args.verbose)
     time2 = time()
     if args.verbose:
-        print("\nThe algorithm took: " + str(round((time2-time1)/60,2)) +\
+        print("\nThe algorithm took: " + str(round((time2-time1)/60, 2)) +
               " minutes.")
 
     if args.output is None:
@@ -105,10 +120,6 @@ def main():
         save_users(infected_users, args.output)
 
     return
-
-
-
-
 
 
 if __name__ == '__main__':

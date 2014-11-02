@@ -4,8 +4,11 @@
 @author: Garrett Reynolds
 """
 
+
 class User:
+
     __all_uids = set()
+
     def __init__(self, uid):
         # check for duplicate Users
         if uid in User._User__all_uids:

@@ -7,6 +7,7 @@ Created on Fri Oct 31 20:29:57 2014
 
 from user import User
 
+
 def save_users(users, filename='output.csv'):
     '''Save users out to a .csv file
 
@@ -26,19 +27,6 @@ def save_users(users, filename='output.csv'):
                 file.flush()
     return
 
-#def save_infections(infected_users, filename):
-#    '''Save infections to file
-#
-#    INPUT:
-#      > infected_users: a set of the UIDs of infected users.'''
-#
-#
-#def load_infections(filename):
-#    '''Load infections into a set'''
-#
-#
-#
-#    return infected_users
 
 def load_users(filename):
     '''Load users from a .csv file
@@ -65,7 +53,7 @@ def load_users(filename):
             split_line = line.split(',')
             new_uid = _try_converting_to_int(split_line[0])
             new_user = User(new_uid)
-            users.update({new_user.get_uid():new_user})
+            users.update({new_user.get_uid(): new_user})
     with open(filename, 'r') as file:
         for line in file:
             line = line.split('\n')[0]

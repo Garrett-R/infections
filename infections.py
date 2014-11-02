@@ -91,7 +91,7 @@ def limited_infection(all_users, num_to_infect, tol=0, verbose=False):
         raise RuntimeError("You must infect a positive number of users.")
 
     # number of users in each connected component
-    comp_counts = []  # TODO: update for starting with users.  and same for comp_uids, users_ever_infected
+    comp_counts = []
     # the uids for each connected component
     comp_uids = []
 

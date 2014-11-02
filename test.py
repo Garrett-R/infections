@@ -36,7 +36,7 @@ def _create_users(num_users=1000, max_comp_size=50, prob_students=0.1,
         # create users for this connected component
         for user_i in range(num_current_users,
                             num_current_users + comp_size):
-            users.update({user_i:User(user_i)})
+            users.update({user_i: User(user_i)})
         # link to students
         for user_i in range(num_current_users,
                             num_current_users + comp_size):
@@ -46,8 +46,8 @@ def _create_users(num_users=1000, max_comp_size=50, prob_students=0.1,
 
             num_students = random.randint(0, max_students+1)
             student_uids = random.randint(num_current_users,
-                                   num_current_users + comp_size,
-                                   size = num_students)
+                                          num_current_users + comp_size,
+                                          size=num_students)
             for student_uid in student_uids:
                 # you can't teach yourself
                 if student_uid == user_i:
@@ -66,14 +66,14 @@ def _create_example_small():
     User.clear_users()
     users = {}
     for uid in range(10):
-        users.update({uid:User(uid)})
+        users.update({uid: User(uid)})
 
-    #first connected connected component (with cycles)
+    # first connected connected component (with cycles)
     users[0].add_students(users[3])
     users[1].add_students(users[2])
     users[2].add_students((users[0], users[3]))
     users[3].add_students(users[1])
-    #second connected component
+    # second connected component
     users[4].add_students((users[5], users[8], users[6]))
     users[5].add_students((users[6], users[8]))
     users[6].add_students(users[4])
@@ -96,7 +96,7 @@ def _create_example_large():
         print("Loading large example from file...")
         users = load_users(example_large_filename)
         # convert to dictionary
-        users = {user.get_uid():user for user in users}
+        users = {user.get_uid(): user for user in users}
     except FileNotFoundError:
         print('Creating large example.  May take a few minutes, but you only '
               'have to do it once.')
@@ -112,15 +112,15 @@ def _test_total_infection_example_small():
     users = _create_example_small()
     infected_user = users[2]
     assert(total_infection(infected_user)
-            == set((0, 1, 2, 3)))
+           == set((0, 1, 2, 3)))
 
     infected_user = users[7]
     assert(total_infection(infected_user)
-            == set((4, 5, 6, 7, 8)))
+           == set((4, 5, 6, 7, 8)))
 
     infected_user = users[9]
     assert(total_infection(infected_user)
-            == set((9,)))
+           == set((9,)))
 
     return True
 
@@ -131,8 +131,8 @@ def _test_limited_infection_example_small():
     assert(limited_infection(users, 5) == set((4, 5, 6, 7, 8)))
     assert(limited_infection(users, 9) == set((0, 1, 2, 3, 4, 5, 6, 7, 8)))
     assert(limited_infection(users, 0.1) == set((9,)))
-    assert(limited_infection(users, 2) == set((9,0)) or
-           limited_infection(users, 2) == set((9,1)))
+    assert(limited_infection(users, 2) == set((9, 0)) or
+           limited_infection(users, 2) == set((9, 1)))
     return True
 
 
@@ -153,14 +153,14 @@ def _test_total_infection_example_large(users_example_large):
 
 def _test_limited_infection_example_large(users_example_large):
     infected_users = limited_infection(users_example_large,
-                                       num_to_infect = 0.7,
+                                       num_to_infect=0.7,
                                        tol=0, verbose=False)
     proportion_infected = len(infected_users) / len(users_example_large)
-    assert( 0.69 < proportion_infected and proportion_infected < 0.71)
+    assert(0.69 < proportion_infected and proportion_infected < 0.71)
 
     for num_to_infect in [1000, 2000, 3000, 4000, 4550]:
         infected_users = limited_infection(users_example_large,
-                                           num_to_infect = num_to_infect,
+                                           num_to_infect=num_to_infect,
                                            tol=0,
                                            verbose=True)
         assert(len(infected_users) == num_to_infect)
