@@ -5,6 +5,7 @@
 @author: Garrett Reynolds
 """
 
+from __future__ import print_function
 import argparse
 from save_load import _try_converting_to_int, load_users, save_users
 from infections import total_infection, limited_infection
@@ -36,9 +37,20 @@ def main():
 
     args = parser.parse_args()
 
+    # check dependencies
+    try:
+        import numpy
+    except ImportError:
+        from sys import version_info
+        print("It appears you don't have NumPy installed... ")
+        if version_info[0] == 3:
+            print("Perhaps you have it for Python 2.  Try: 'python ./run.py'")
+        print("Exiting...")
+        return
+
     if args.total and not args.user:
         print("You asked for total infection, so you must specify a starting "
-              "user ID.  Exiting...")
+              "user ID. Example: '--user 42'  Exiting...")
         return
 
     if args.total and args.limited:
@@ -71,7 +83,7 @@ def main():
 
     if args.total:
         infected_uids = total_infection(users[args.user])
-        if verbose:
+        if args.verbose:
             print("A total of", len(infected_uids), "users were infected.")
     elif args.limited:
         if args.tolerance is None:
