@@ -16,11 +16,11 @@ You can now execute the unit test to make sure everything is in order:
 
     ./test.py
 
-NOTE: the script runs significantly faster with Pyhton 3, so if you have, please execute
+NOTE: the script runs significantly faster with Pyhton 3, so if you have it installed (as well as NumPy for Python 3), please execute
 
     python3 ./test.py
 
-instead (same goes for using ./run.py below).
+instead (same goes for using `./run.py` below).
 
 **Input**
 
@@ -53,6 +53,11 @@ If you want to infect 2000 +/- 50, you can do
 
 The advantage of this is that you get a higher chance of getting a perfect split.
 
+If you forget the flags to use, type
+
+    ./run.py --help
+
+
 Assumptions
 -----------
 
@@ -84,3 +89,4 @@ Here's some possible enhancements for **limited infection**,
  - Take into account an attribute of the user and slightly prefer infections of users with a similar attribute.  For example, say users have the same zip code, they're much more likely to know each other in person, so we should slightly prefer to keep them in the same group.
  - Spend more time finding a perfect split.  The algorithm tends to be fairly good at finding a perfect split if there is one, but certainly not perfect.  We could find the numbers of users in each connected component, then solve the problem of finding a subarry sum equal to the target infection number.  (this may be prohibitively slow though)
  - Load users from file faster (currently, loading from file is about 80% of the runtime).  This is the slowest part, but would be easy to improve by reading multiple lines from the file at a time. 
+ - Since this is a graph partitioning problem, we could make it more general ("nodes" instead of "users", etc.) so others could use it.

@@ -181,9 +181,11 @@ def run_tests():
         print("Total infection large example: PASSED")
     else:
         print("Total infection large example: FAILED")
+        return
     if _test_limited_infection_example_large(users_example_large):
         print("Limited infection large example: PASSED")
 
+    print('All tests passed')
 
 if __name__ == '__main__':
     run_tests()

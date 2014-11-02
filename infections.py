@@ -11,7 +11,12 @@ from copy import deepcopy
 
 
 def total_infection(user):
-    '''TODO:
+    '''Infect all users of the connected component which user is a part of
+
+    INPUT:
+        > user:  a User object
+    RETURN:
+        > set of user IDs for the users in the connected component.
     '''
     assert(isinstance(user, User))
     # the set of infected users so far
@@ -27,10 +32,15 @@ def _infect_coaches_students(user, infected_users):
     infected.
 
     INPUT:
+        > user: User object
+        > infected_users: set of User objects
+
+    RETURN:
+        > infected_users: set of User objects
     '''
     # infect the students and coaches of this user who aren't already infected
     for user_to_infect in (user.get_students() | user.get_coaches()
-                            - infected_users):
+                           - infected_users):
         # due to the fact the graph can be cyclic, a user may have gotten
         # infected since starting the for loop, so we double check
         if user_to_infect in infected_users:
@@ -50,8 +60,8 @@ def limited_infection(all_users, num_to_infect, tol=0, verbose=False):
     INPUT:
         > all_users: A dictionary with UID as keys and the corresponding User
                     objects as values.
-        > num_to_infected: (int or float) If integer, that is the number of people
-                        who will be infected.  If float, then it must be
+        > num_to_infected: (int or float) If integer, that is the number of
+                        people who will be infected.  If float, then it must be
                         between 0 and 1 and represents the proportion of
                         infected people.
         > tolerance: (int or float) The tolerance in number of infected people
@@ -63,8 +73,6 @@ def limited_infection(all_users, num_to_infect, tol=0, verbose=False):
     RETURN:
         > a set of UIDs of the infected people'''
 
-
-    users_currently_infected = set()
     # while searching for an exact match, we "cure" whole connected components
     # and we want to make sure not to reconsider users who have ever been
     # infected
@@ -95,7 +103,7 @@ def limited_infection(all_users, num_to_infect, tol=0, verbose=False):
     # the uids for each connected component
     comp_uids = []
 
-    #get all connected components and the number users in each one
+    # get all connected components and the number users in each one
     for uid, user in all_users.items():
         if uid in users_ever_infected:
             continue
@@ -103,7 +111,6 @@ def limited_infection(all_users, num_to_infect, tol=0, verbose=False):
         newly_infected_uids = total_infection(user)
         num_newly_infected = len(newly_infected_uids)
 
-#        newly_infected_uids = set((user.get_uid() for user in newly_infected))
         users_ever_infected.update(newly_infected_uids)
         comp_uids.append(newly_infected_uids)
         comp_counts.append(num_newly_infected)
@@ -120,7 +127,7 @@ def limited_infection(all_users, num_to_infect, tol=0, verbose=False):
     smallest_uninfected_comp = -1
     for comp_i, comp_count in enumerate(comp_counts):
         if num_infected + comp_count > num_to_infect:
-            smallest_uninfected_comp = comp_i # (we use this later on)
+            smallest_uninfected_comp = comp_i  # (we use this later on)
             continue
         num_infected += comp_count
         comps_to_keep.append(comp_i)
@@ -129,14 +136,16 @@ def limited_infection(all_users, num_to_infect, tol=0, verbose=False):
 
     # if we're lucky, we got an exact split, otherwise, we'll have to break
     # up a connected component
-    if (num_to_infect - tol) <= num_infected and num_infected <= (num_to_infect + tol):
+    if ((num_to_infect - tol) <= num_infected and
+            num_infected <= (num_to_infect + tol)):
         if verbose:
             print("A split without any coflicts was found!")
     else:
         # we already know the smallest uninfected component is larger than we
         # need so we only need to split that one
         smallest_comp_users = [all_users[user_i]
-                               for user_i in comp_uids[smallest_uninfected_comp]]
+                               for user_i
+                               in comp_uids[smallest_uninfected_comp]]
         # number of users left to infect
         remaining_to_infect = num_to_infect - num_infected
         extra_infected_users = _split_component(smallest_comp_users,
@@ -201,16 +210,8 @@ def _split_component(users, remaining_to_infect, max_iter=10000):
 
     num_uninfected = len(users) - remaining_to_infect
     infected_uids = set()
-    users_dict = {user.get_uid():user for user in users}
+    users_dict = {user.get_uid(): user for user in users}
     all_uids = set(users_dict.keys())
-
-#    if remaining_to_infect <= num_uninfected:
-##        fewer_infected = True
-#        small_partition_size = remaining_to_infect
-#    else:
-##        fewer_infected = False
-#        small_partition_size = num_uninfected
-#    small_partition_size
 
     # start off by randomly assigning users to small group
     for user_i, user in enumerate(users):
@@ -224,20 +225,20 @@ def _split_component(users, remaining_to_infect, max_iter=10000):
         g_pairs = []
         # the infected UIDs for this round
         temp_inf_uids = deepcopy(infected_uids)
-        #uids that have already been moved during this round
+        # uids that have already been moved during this round
         completed_uids = set()
-        for nn in range(min(remaining_to_infect, num_uninfected)):  #(small_partition_size):  TODO
+        for nn in range(min(remaining_to_infect, num_uninfected)):
             for uid in (all_uids - completed_uids):
                 user = users_dict[uid]
                 user._d = _get_D_value(user, temp_inf_uids)
             # find maximum g value
-            max_g_value=-1000000000
+            max_g_value = -1000000000
             max_g_pair = (-1, -1)
             for inf in temp_inf_uids - completed_uids:
                 for non_inf in (all_uids - temp_inf_uids - completed_uids):
                     g_value = users_dict[inf]._d + users_dict[non_inf]._d \
-                              -2*(_are_connected(users_dict[inf],
-                                                 users_dict[non_inf]))
+                        - 2 * (_are_connected(users_dict[inf],
+                                              users_dict[non_inf]))
                     if g_value > max_g_value:
                         max_g_value = g_value
                         max_g_pair = (inf, non_inf)
@@ -257,7 +258,7 @@ def _split_component(users, remaining_to_infect, max_iter=10000):
             uids_to_switch = g_pairs[g_pair_i]
             _toggle_infected(uids_to_switch, infected_uids)
 
-    #end for (KL alogorithm main loop)
+    # end for (KL alogorithm main loop)
     else:
         print("WARNING: maximum number of iteration reached during KL "
               "algorithm...")
@@ -287,8 +288,8 @@ def _find_max_left_justified_subarray(array):
 
 
 def _find_num_conflicts(user, infected_set):
-    '''Number of conlifcting relationships.  For example, if user is infected and has
-    connections to 4 uninfected users, return 4.'''
+    '''Number of conlifcting relationships.  For example, if user is infected
+    and has connections to 4 uninfected users, return 4.'''
     num_conn_infected = num_conn_uninfected = 0
     for conn in (user.get_students() | user.get_coaches()):
         if conn.get_uid() in infected_set:
