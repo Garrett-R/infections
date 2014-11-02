@@ -30,22 +30,26 @@ To give an input, it must be a .csv file where, for each line, the first number 
 
 To spread a total infection starting from user 42,
 
-    ./run.py --total -v --input test_data/example_large.csv --output infected_users.csv --user 42
+    ./run.py --total -v --input test_data/example_large.csv \
+    --output infected_users.csv --user 42
 
 
 **Limited Infection**
 
 To create a limited infection with 2000 users, do
 
-	./run.py --limited -v --input test_data/example_large.csv --output infected_users.csv --numToInfect 2000
+	./run.py --limited -v --input test_data/example_large.csv \
+    --output infected_users.csv --numToInfect 2000
 
 You can also specify the proportion of users, so to infect half of them, do
 
-	./run.py --limited -v --input test_data/example_large.csv --output infected_users.csv --numToInfect 0.5
+	./run.py --limited -v --input test_data/example_large.csv \
+    --output infected_users.csv --numToInfect 0.5
 
 If you want to infect 2000 +/- 50, you can do
 
-	./run.py --limited -v --input test_data/example_large.csv --output infected_users.csv --numToInfect 2000 --tolerance 50
+	./run.py --limited -v --input test_data/example_large.csv \
+    --output infected_users.csv --numToInfect 2000 --tolerance 50
 
 where we have a higher chance of getting a perfect split.
 
