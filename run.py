@@ -93,8 +93,9 @@ def main():
         infected_uids = limited_infection(users, args.numToInfect,
                                            args.tolerance, args.verbose)
     time2 = time()
-    if verbose:
-        print("\nThat took: " + str(round((time2-time1)/60,2)) + " minutes.")
+    if args.verbose:
+        print("\nThe algorithm took: " + str(round((time2-time1)/60,2)) +\
+              " minutes.")
 
     if args.output is None:
         print("No ouput file specified, so results won't be saved")

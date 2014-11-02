@@ -16,6 +16,12 @@ You can now execute the unit test to make sure everything is in order:
 
     ./test.py
 
+NOTE: the script runs significantly faster with Pyhton 3, so if you have, please execute
+
+    python3 ./test.py
+
+instead (same goes for using ./run.py below)
+
 **Input**
 
 To give an input, it must be a .csv file where, for each line, the first number is the user ID, and the following numbers (if any) are IDs of connected nodes (in Khan Academy's case, that's students.  No need to specify coaches since that's redundant ‒ see assumptions)
