@@ -112,15 +112,15 @@ def _test_total_infection_example_small():
     users = _create_example_small()
     infected_user = users[2]
     assert(total_infection(infected_user)
-            == set((users[0], users[1], users[2], users[3])))
+            == set((0, 1, 2, 3)))
 
     infected_user = users[7]
     assert(total_infection(infected_user)
-            == set((users[4], users[5], users[6], users[7], users[8])))
+            == set((4, 5, 6, 7, 8)))
 
     infected_user = users[9]
     assert(total_infection(infected_user)
-            == set((users[9],)))
+            == set((9,)))
 
     return True
 

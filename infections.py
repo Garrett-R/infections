@@ -18,7 +18,7 @@ def total_infection(user):
     infected_users = set((user,))
     # recursively infect all coaches and students
     _infect_coaches_students(user, infected_users)
-    return infected_users   #TODO: return set of uid's instead?
+    return set((user.get_uid() for user in infected_users))
 
 
 def _infect_coaches_students(user, infected_users):
@@ -58,7 +58,7 @@ def limited_infection(all_users, num_to_infect, tol=0, verbose=False):
                     setting it to be greater than zero makes it more likely to
                     find a subset without conflicts.  If it is a float, it'll
                     be interpreted as a proportion of the total population.
-                    (ignored if perfect_only is True)  #TODO: did I implement this?
+                    (ignored if perfect_only is True)
 
     RETURN:
         > a set of UIDs of the infected people'''
@@ -100,20 +100,13 @@ def limited_infection(all_users, num_to_infect, tol=0, verbose=False):
         if uid in users_ever_infected:
             continue
 
-        newly_infected = total_infection(user)
-        num_newly_infected = len(newly_infected)
+        newly_infected_uids = total_infection(user)
+        num_newly_infected = len(newly_infected_uids)
 
-        newly_infected_uids = set((user.get_uid() for user in newly_infected))
+#        newly_infected_uids = set((user.get_uid() for user in newly_infected))
         users_ever_infected.update(newly_infected_uids)
         comp_uids.append(newly_infected_uids)
         comp_counts.append(num_newly_infected)
-
-#        num_infected = sum(comp_counts)
-#        if (num_to_infect - tol) <= num_infected and (num_to_infect - tol) <= num_infected:
-#            if verbose:
-#                print("A split without any coflicts was found!")
-#            #flatten
-#            return set.union(*comp_uids)
 
     # sort the connected components from largest to smallest
     sorted_ind = np.argsort(comp_counts)
