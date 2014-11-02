@@ -81,6 +81,7 @@ def main():
     # convert to dictionary
     users = {user.get_uid():user for user in users}
 
+    time1 = time()
     if args.total:
         infected_uids = total_infection(users[args.user])
         if args.verbose:
@@ -90,6 +91,9 @@ def main():
             args.tolerance = 0
         infected_uids = limited_infection(users, args.numToInfect,
                                            args.tolerance, args.verbose)
+    time2 = time()
+    if verbose:
+        print("\nThat took: " + str(round((time2-time1)/60,2)) + " minutes.")
 
     if args.output is None:
         print("No ouput file specified, so results won't be saved")
